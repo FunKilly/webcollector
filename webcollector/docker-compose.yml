@@ -1,0 +1,50 @@
+version: '3'
+volumes:
+  postgres_volume:
+services:
+  api: &api
+    container_name: webcollector-api
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: bash -c "sleep 2s && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8080:8000"
+    volumes:
+      - ./webcollector:/app
+    depends_on:
+      - db
+      - rabbitmq
+      - celery_worker
+    env_file:
+      - .env
+    stdin_open: true
+    tty: true
+
+  db:
+    container_name: webcollector-db
+    image: postgres:12.2
+    environment:
+      POSTGRES_USER: $DATABASE_USER
+      POSTGRES_DB: $DATABASE_NAME
+      POSTGRES_PASS: $DATABASE_PASSWORD
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_volume:/var/lib/postgresql
+    env_file:
+      - .env
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.7-alpine
+
+  celery_worker:
+    <<: *api
+    container_name: celery_worker
+    command: celery -A tickets worker --loglevel=info
+    ports: []
+    depends_on:
+      - rabbitmq
+      - db
+    
