@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from envparse import env
+
+env.read_envfile()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -49,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'webcollector.urls'
+ROOT_URLCONF = 'webcollector.webcollector.urls'
 
 TEMPLATES = [
     {
@@ -78,10 +81,10 @@ DATABASES = {
         "ENGINE": env(
             "DATABASE_BACKEND", default="django.db.backends.postgresql_psycopg2"
         ),
-        "NAME": env("DATABASE_NAME", default="postgres"),
-        "HOST": env("DATABASE_HOST", default="db"),
-        "USER": env("DATABASE_USER", default="postgres"),
-        "PASSWORD": env("DATABASE_PASSWORD", default="postgres"),
+        "NAME": env("POSTGRES_DB", default="postgres"),
+        "HOST": env("POSTGRES_HOST", default="db"),
+        "USER": env("POSTGRES_USER", default="postgres"),
+        "PASSWORD": env("POSTGRES_PASSWORD", default="postgres"),
         "ATOMIC_REQUESTS": True,
     },
 }
