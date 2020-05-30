@@ -1,10 +1,11 @@
+from rest_framework import serializers
 
-from collector.models import Website
+from webcollector.collector.models import Website
 
 
 class WebsiteParserSerializer(serializers.ModelSerializer):
     """ Base Serializer Class for listing News instances """
 
-    class Meta(ExpertOpinionSerializer.Meta):
+    class Meta:
         model = Website
         fields = ("url",)

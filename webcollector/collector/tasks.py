@@ -2,9 +2,9 @@ from __future__ import absolute_import, unicode_literals
 
 from urllib.request import urlopen
 
-from celery import AsyncResult, shared_task
-
 from bs4 import BeautifulSoup
+from celery import shared_task
+from celery.result import AsyncResult
 
 
 @shared_task

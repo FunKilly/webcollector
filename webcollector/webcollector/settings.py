@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third party apps.
     "djcelery",
+    # Local Apps
+    "webcollector.collector",
 ]
 
 MIDDLEWARE = [
