@@ -12,10 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
-import djcelery
 from envparse import env
-
-djcelery.setup_loader()
 
 env.read_envfile()
 
@@ -44,8 +41,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Third party apps.
-    "djcelery",
     # Local Apps
     "webcollector.collector",
 ]
@@ -100,6 +95,7 @@ DATABASES = {
 CELERY_BROKER_URL = "amqp://rabbitmq"
 CELERY_RESULT_BACKEND = "amqp://rabbitmq"
 CELERY_TRACK_STARTED = True
+CELERY_IGNORE_RESULT = False
 
 
 # Password validation

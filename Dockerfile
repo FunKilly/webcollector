@@ -16,6 +16,7 @@ COPY requirements.txt /app/
 
 RUN pip install --no-cache-dir -r requirements.txt
 
+CMD celery worker -A webcollector.webcollector --loglevel=info
 
 ENTRYPOINT ["/entrypoint.sh"]
 

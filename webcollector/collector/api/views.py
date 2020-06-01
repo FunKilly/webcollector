@@ -1,7 +1,9 @@
+from celery.result import AsyncResult
 from rest_framework import generics, status
 from rest_framework.response import Response
 
 from webcollector.collector.api.serializers import WebsiteParserSerializer
+from webcollector.collector.constants import CELERY_STATES
 from webcollector.collector.models import Website
 from webcollector.collector.tasks import parse_website
 
@@ -22,16 +24,6 @@ class WebsiteParserView(generics.ListCreateAPIView):
 
 class WebsiteView(generics.RetrieveAPIView):
     def get(self, request, task_id, *args, **kwargs):
-        from celery.result import AsyncResult
-
         task = AsyncResult(str(task_id))
-        return Response(task.status, status=status.HTTP_200_OK)
-        # return Response(task_id, status=status.HTTP_200_OK)
-
-        if not task_id:
-            return Response("Website does not exist", status=status.HTTP_404_NOT_FOUND)
-        else:
-            # task_status =
-            # data = {"email": user.email, "name": user.name, "role": user.role}
-            # return Response(data, status=status.HTTP_200_OK)
-            return Response("dupa")
+        task_status = CELERY_STATES.get(task.state, "Current status was not included.")
+        return Response(task_status, status=status.HTTP_200_OK)

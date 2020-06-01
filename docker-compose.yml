@@ -4,6 +4,7 @@ volumes:
 services:
   api: &api
     container_name: webcollector-api
+    restart: unless-stopped
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -38,17 +39,9 @@ services:
   celery_worker:
     <<: *api
     container_name: celery_worker
-    command: celery --app=webcollector.webcollector worker --loglevel=info
+    restart: "no"
+    command: "celery -A webcollector.webcollector worker --loglevel=info"
     ports: []
     depends_on:
       - rabbitmq
       - db
-  
-  flower:  
-    image: mher/flower
-    environment:
-      - CELERY_BROKER_URL=amqp://rabbitmq
-      - FLOWER_PORT=8888
-    ports:  
-      - 8888:8888
-    

@@ -1,9 +1,6 @@
-from django.db import models
-from django.utils.translation import gettext_lazy as _
-
-
-class ProcessingStatusType(models.TextChoices):
-    CREATED = "created", _("Created")
-    PROCESSING = "processing", _("During the processing")
-    COMPLETED = "completed", _("Completed")
-    FAILED = "failed", _("Failed")
+CELERY_STATES = {
+    "PENDING": "State is unknown, check the given id.",
+    "SUCCESS": "Task has been successfilly finished.",
+    "STARTED": "Task is under processing.",
+    "FAILURE": "Task failed.",
+}

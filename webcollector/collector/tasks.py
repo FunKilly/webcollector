@@ -1,14 +1,31 @@
 from __future__ import absolute_import, unicode_literals
 
+import urllib.request
+from urllib.error import URLError
 
-from celery import shared_task
+from bs4 import BeautifulSoup
+from celery import shared_task, states
+from celery.exceptions import Ignore
+
+from webcollector.collector.models import Website
 
 
-@shared_task
-def parse_website(url):
+@shared_task(bind=True)
+def parse_website(self, url):
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
 
-    # req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-    # html = urllib.request.urlopen(req).read()
+    try:
+        html = urllib.request.urlopen(req).read()
+    except URLError as error:
+        self.update_state(state=states.FAILURE, meta=error)
+        raise Ignore()
+    else:
+        soup = BeautifulSoup(html, "lxml")
 
-    # BeautifulSoup(html, "lxml")
-    print("zobaczymy czy bedzie completed")
+        Website.objects.create(
+            title=str(soup.title),
+            url=url,
+            raw_text=soup.prettify(),
+            text=soup.get_text(),
+            task_id=self.request.id,
+        )
