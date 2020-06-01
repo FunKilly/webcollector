@@ -1,4 +1,4 @@
-version: '3'
+version: '3.3'
 volumes:
   postgres_volume:
 services:
@@ -38,9 +38,17 @@ services:
   celery_worker:
     <<: *api
     container_name: celery_worker
-    command: celery -A tickets worker --loglevel=info
+    command: celery --app=webcollector.webcollector worker --loglevel=info
     ports: []
     depends_on:
       - rabbitmq
       - db
+  
+  flower:  
+    image: mher/flower
+    environment:
+      - CELERY_BROKER_URL=amqp://rabbitmq
+      - FLOWER_PORT=8888
+    ports:  
+      - 8888:8888
     

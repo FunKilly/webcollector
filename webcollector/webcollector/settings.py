@@ -32,7 +32,7 @@ SECRET_KEY = "hf4-%$g7by5xej-zk8jw5%jr(su0pt4s=tk24b8sf@w&76=vtu"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -98,6 +98,8 @@ DATABASES = {
 }
 
 CELERY_BROKER_URL = "amqp://rabbitmq"
+CELERY_RESULT_BACKEND = "amqp://rabbitmq"
+CELERY_TRACK_STARTED = True
 
 
 # Password validation

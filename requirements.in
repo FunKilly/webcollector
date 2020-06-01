@@ -12,3 +12,5 @@ django-celery
 beautifulsoup4
 lxml
 pdbpp
+flower
+celery==4.3.0
