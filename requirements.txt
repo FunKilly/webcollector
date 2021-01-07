@@ -23,7 +23,7 @@ filelock==3.0.12          # via tox, virtualenv
 invoke==1.4.1             # via -r requirements.in
 isort==4.3.21             # via -r requirements.in
 kombu==4.6.8              # via celery
-lxml==4.5.1               # via -r requirements.in
+lxml==4.6.2               # via -r requirements.in
 packaging==20.4           # via tox
 pathspec==0.8.0           # via black
 pdbpp==0.10.2             # via -r requirements.in
